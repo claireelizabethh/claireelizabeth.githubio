@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ed1684" />
+    <meta name="description" content="Taskit — a cheerful space to plan your day." />
+    <title>Taskit — Make today count</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="sketch.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#dashboard" aria-label="Taskit home">
+          <span class="brand-mark">✓</span><span>Taskit</span>
+        </a>
+        <nav class="main-nav">
+          <button class="nav-link active" data-view="dashboard"><span class="nav-icon">▦</span><span>Dashboard</span></button>
+          <button class="nav-link" data-view="calendar"><span class="nav-icon">▦</span><span>Calendar</span></button>
+          <button class="nav-link" data-view="todo"><span class="nav-icon">☷</span><span>To-Do List</span><span class="nav-count" id="nav-count">0</span></button>
+          <button class="nav-link" data-view="settings"><span class="nav-icon">⚙</span><span>Settings</span></button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-note"><span class="note-spark">✦</span><p>A little progress each day adds up.</p></div>
+          <button class="nav-link logout-link" type="button"><span class="nav-icon">↪</span><span>Log out</span></button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Workspace</span><span class="crumb-divider">/</span><strong id="page-label">Dashboard</strong></div>
+          <div class="top-actions">
+            <button class="icon-button notification-button" aria-label="Notifications" title="Notifications">♧<i></i></button>
+            <button class="profile-chip" aria-label="Open profile settings">
+              <span class="avatar avatar-small">L</span><span class="profile-name">Lily Chen</span><span class="chevron">⌄</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="view active" id="dashboard-view" aria-labelledby="dashboard-title">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow" id="today-date">YOUR DAY, AT A GLANCE</p>
+              <h1 id="dashboard-title">Good morning, Lily <span class="wave">✦</span></h1>
+              <p class="subheading">You’re doing great. Keep it going!</p>
+            </div>
+            <button class="date-pill" id="today-pill"><span class="date-icon">▦</span><span id="today-short"></span></button>
+          </div>
+
+          <div class="hero-card">
+            <div class="hero-copy">
+              <span class="hero-kicker">A FRESH START</span>
+              <h2>Make today count.</h2>
+              <p>One thing at a time. You’ve got this.</p>
+              <button class="button button-white" data-open-view="todo">See my tasks <span>→</span></button>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+              <div class="sun"></div><div class="art-spark spark-one">✦</div><div class="art-spark spark-two">✧</div>
+              <div class="art-page"><span></span><span></span><span></span><b>✓</b></div>
+              <div class="art-orbit"></div>
+            </div>
+          </div>
+
+          <div class="stats-row" aria-label="Today's summary">
+            <article class="stat-card"><span class="stat-icon icon-pink">☷</span><div><p>Tasks completed</p><strong id="completed-stat">0 <small>/ 0</small></strong></div><span class="stat-trend">Today</span></article>
+            <article class="stat-card"><span class="stat-icon icon-yellow">✦</span><div><p>Focus time</p><strong>2h 30m</strong></div><span class="stat-trend">This week</span></article>
+            <article class="stat-card"><span class="stat-icon icon-lilac">♧</span><div><p>On your calendar</p><strong id="event-stat">3 <small>events</small></strong></div><span class="stat-trend">Today</span></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel calendar-panel">
+              <div class="panel-heading">
+                <div><p class="eyebrow">PLAN AHEAD</p><h2>Calendar</h2></div>
+                <button class="text-button" data-open-view="calendar">Full calendar <span>→</span></button>
+              </div>
+              <div class="month-controls">
+                <button class="round-button" data-month-step="-1" aria-label="Previous month">‹</button>
+                <strong id="mini-month-label"></strong>
+                <button class="round-button" data-month-step="1" aria-label="Next month">›</button>
+              </div>
+              <div class="calendar-grid mini-calendar" id="mini-calendar"></div>
+              <div class="up-next">
+                <span class="up-next-dot"></span><span><strong>10:00 AM</strong> · Team stand-up</span><button aria-label="View calendar" data-open-view="calendar">→</button>
+              </div>
+            </section>
+            <section class="panel tasks-panel">
+              <div class="panel-heading">
+                <div><p class="eyebrow">KEEP THE MOMENTUM</p><h2>To-Do List <span class="heading-count" id="task-heading-count">0</span></h2></div>
+                <button class="text-button" data-open-view="todo">View all <span>→</span></button>
+              </div>
+              <form class="quick-add" id="quick-add-form">
+                <span class="plus-icon">+</span><input id="quick-task-input" type="text" aria-label="Add a task" placeholder="Add a task for today..." maxlength="90" required />
+                <button type="submit" aria-label="Add task">↵</button>
+              </form>
+              <div class="task-list compact-task-list" id="dashboard-task-list"></div>
+              <div class="task-footer"><span id="dashboard-progress">A little progress goes a long way</span><span class="progress-count" id="progress-count">0%</span></div>
+              <div class="progress-track"><span id="progress-bar"></span></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="calendar-view" aria-labelledby="calendar-title">
+          <div class="view-title-row">
+            <div><p class="eyebrow">MAKE ROOM FOR WHAT MATTERS</p><h1 id="calendar-title">Your calendar</h1><p class="subheading">A clear plan makes space for a calmer day.</p></div>
+            <button class="button button-primary" data-open-view="todo">＋ Add a task</button>
+          </div>
+          <div class="calendar-page-grid">
+            <section class="panel full-calendar-panel">
+              <div class="full-calendar-toolbar">
+                <div class="month-controls"><button class="round-button" data-month-step="-1" aria-label="Previous month">‹</button><button class="round-button" data-month-step="1" aria-label="Next month">›</button><strong id="full-month-label"></strong></div>
+                <button class="button button-soft" id="calendar-today">Today</button>
+              </div>
+              <div class="calendar-grid full-calendar" id="full-calendar"></div>
+            </section>
+            <aside class="panel events-panel">
+              <div class="panel-heading"><div><p class="eyebrow">DON’T MISS A THING</p><h2>Upcoming events</h2></div><span class="event-calendar-icon">▦</span></div>
+              <p class="events-date-label" id="events-date-label">TODAY · OCTOBER 8</p>
+              <div class="event-list">
+                <article class="event-card"><span class="event-time">10:00 AM – 11:00 AM</span><h3>Meeting with the team</h3><p>Talk about the product</p><span class="event-tag">Work</span></article>
+                <article class="event-card"><span class="event-time">12:00 PM – 1:00 PM</span><h3>Indonesia Art History Class</h3><p>Learn about the history of Raden Saleh</p><span class="event-tag tag-purple">Class</span></article>
+                <article class="event-card"><span class="event-time">6:00 PM – 7:30 PM</span><h3>Tea time and Liam</h3><p>Talk about the IELTS</p><span class="event-tag tag-yellow">Personal</span></article>
+              </div>
+              <div class="month-motivation"><span>✦</span><p class="eyebrow">YOUR BEST MONTH</p><strong>Small steps, big things.</strong><p>Keep showing up for yourself.</p></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="todo-view" aria-labelledby="todo-title">
+          <div class="view-title-row">
+            <div><p class="eyebrow">ONE THING AT A TIME</p><h1 id="todo-title">To-Do List</h1><p class="subheading">Turn your plans into progress.</p></div>
+            <span class="task-date-label" id="todo-date-label"></span>
+          </div>
+          <div class="todo-layout">
+            <section class="panel all-tasks-panel">
+              <div class="todo-toolbar">
+                <div class="filter-tabs" role="tablist" aria-label="Filter tasks">
+                  <button class="filter-tab selected" data-filter="all" role="tab" aria-selected="true">All tasks</button>
+                  <button class="filter-tab" data-filter="active" role="tab" aria-selected="false">In progress</button>
+                  <button class="filter-tab" data-filter="completed" role="tab" aria-selected="false">Completed</button>
+                </div>
+                <label class="search-box"><span>⌕</span><input type="search" id="task-search" placeholder="Search tasks..." aria-label="Search tasks" /></label>
+              </div>
+              <form class="add-task-form" id="add-task-form">
+                <span class="add-form-icon">＋</span><input id="new-task-input" type="text" placeholder="What needs to get done?" maxlength="90" required />
+                <select id="new-task-category" aria-label="Task category"><option>Personal</option><option>Work</option><option>Study</option></select>
+                <button class="button button-primary" type="submit">Add task</button>
+              </form>
+              <div class="full-task-list" id="full-task-list"></div>
+              <div class="empty-state" id="empty-tasks" hidden><span>✦</span><h3>All clear for now</h3><p>Add a task above and make it happen.</p></div>
+              <div class="list-bottom"><span id="list-task-summary"></span><button class="text-button" id="clear-completed">Clear completed</button></div>
+            </section>
+            <aside class="panel focus-panel"><div class="focus-illustration">✦</div><p class="eyebrow">A GENTLE REMINDER</p><h2>You don’t have to do it all at once.</h2><p>Pick one small thing, give it your attention, and let the rest wait.</p><div class="focus-tip"><span>☼</span><div><strong>Make space to focus</strong><p>Small wins are still wins.</p></div></div></aside>
+          </div>
+        </section>
+
+        <section class="view" id="settings-view" aria-labelledby="settings-title">
+          <div class="view-title-row"><div><p class="eyebrow">MAKE IT YOURS</p><h1 id="settings-title">Account settings</h1><p class="subheading">A few little things to make Taskit feel like you.</p></div></div>
+          <div class="settings-layout">
+            <nav class="settings-nav panel" aria-label="Settings sections">
+              <button class="settings-tab selected" data-setting="profile"><span>♙</span>Profile settings</button>
+              <button class="settings-tab" data-setting="password"><span>♙</span>Password</button>
+              <button class="settings-tab" data-setting="notifications"><span>♧</span>Notifications</button>
+              <button class="settings-tab" data-setting="appearance"><span>☼</span>Appearance</button>
+              <button class="settings-tab" data-setting="calendar-preferences"><span>▦</span>Calendar preferences</button>
+            </nav>
+            <div class="settings-content panel">
+              <section class="settings-section active" id="profile-settings">
+                <div class="settings-section-heading"><div><p class="eyebrow">YOUR PERSONAL DETAILS</p><h2>Profile settings</h2></div><div class="avatar avatar-large">L</div></div>
+                <label class="upload-row"><span>Profile photo</span><button class="button button-soft" type="button">Upload new</button><button class="button button-quiet" type="button">Remove</button></label>
+                <form class="profile-form" id="profile-form">
+                  <label>First name<input type="text" value="Lily" /></label><label>Last name<input type="text" value="Chen" /></label>
+                  <label>Email address<input type="email" value="lily.chen@email.com" /></label><label>Phone number<input type="tel" placeholder="+1 (555) 000-0000" /></label>
+                  <label>Language<select><option>English (US)</option><option>English (UK)</option></select></label><label>Time zone<select><option>Eastern Time (ET)</option><option>Pacific Time (PT)</option><option>Central European Time</option></select></label>
+                  <div class="form-actions"><button class="button button-primary" type="submit">Save changes</button><button class="button button-quiet" type="reset">Cancel</button></div>
+                </form>
+              </section>
+              <section class="settings-section" id="password-settings"><p class="eyebrow">KEEP YOUR ACCOUNT SECURE</p><h2>Change password</h2><form class="stacked-form" id="password-form"><label>Old password<input type="password" placeholder="Enter current password" required /></label><label>New password<input type="password" placeholder="At least 8 characters" minlength="8" required /></label><label>Confirm new password<input type="password" placeholder="Enter your new password again" minlength="8" required /></label><div class="form-actions"><button class="button button-primary" type="submit">Update password</button></div></form><p class="form-hint">Your password should be at least 8 characters long.</p></section>
+              <section class="settings-section" id="notifications-settings"><p class="eyebrow">STAY IN THE LOOP</p><h2>Notification settings</h2><p class="settings-description">Choose which updates you’d like Taskit to send you.</p><div class="preference-list"><label class="preference-row"><span><strong>Task reminders</strong><small>Get a nudge before a task is due.</small></span><input type="checkbox" role="switch" checked /></label><label class="preference-row"><span><strong>Daily summary</strong><small>A quick look at your day, every morning.</small></span><input type="checkbox" role="switch" checked /></label><label class="preference-row"><span><strong>Product updates</strong><small>Hear about new features and improvements.</small></span><input type="checkbox" role="switch" /></label><label class="preference-row"><span><strong>Event reminders</strong><small>Get reminded before an upcoming event.</small></span><input type="checkbox" role="switch" checked /></label></div></section>
+              <section class="settings-section" id="appearance-settings"><p class="eyebrow">A LITTLE PERSONAL TOUCH</p><h2>Appearance</h2><p class="settings-description">Make your workspace feel just right.</p><div class="preference-list"><label class="preference-row"><span><strong>Dark mode</strong><small>Switch between light and dark mode.</small></span><input id="dark-mode-toggle" type="checkbox" role="switch" /></label><label class="preference-row"><span><strong>Comfortable spacing</strong><small>Give your tasks a little more breathing room.</small></span><input type="checkbox" role="switch" checked /></label></div><label class="brightness-setting">Accent color<select id="accent-select"><option value="pink">Soft pink</option><option value="lavender">Lavender</option><option value="peach">Peach</option></select></label></section>
+              <section class="settings-section" id="calendar-preferences-settings"><p class="eyebrow">YOUR CALENDAR, YOUR WAY</p><h2>Calendar preferences</h2><p class="settings-description">Choose the details that work best for you.</p><div class="preference-list"><label class="preference-row"><span><strong>Assignments</strong><small>Show assignment due dates on the calendar.</small></span><input type="checkbox" role="switch" checked /></label><label class="preference-row"><span><strong>Projects</strong><small>Show project milestones on the calendar.</small></span><input type="checkbox" role="switch" checked /></label><label class="preference-row"><span><strong>Fitness</strong><small>Show your scheduled workouts.</small></span><input type="checkbox" role="switch" /></label><label class="preference-row"><span><strong>Holidays</strong><small>Show public holidays in your calendar.</small></span><input type="checkbox" role="switch" checked /></label></div><label class="brightness-setting">Week starts on<select><option>Monday</option><option>Sunday</option></select></label></section>
+            </div>
+          </div>
+        </section>
+        <footer class="app-footer"><span>Made for your kind of day <b>✦</b></span><span>Taskit © 2026</span></footer>
+      </main>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
